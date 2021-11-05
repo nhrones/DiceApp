@@ -58,7 +58,7 @@ class SocketSingleton {
         if (this.webSocket) { return } 
         
         // instantiate a new WebSocket listener
-        let ws = `wss://socket-dice-server.deno.dev`
+        let ws = `wss://dice-socket-server.deno.dev/`
         if (window.location.host === '127.0.0.1:8000' || window.location.host === 'localhost:8000') {
             ws = 'ws://127.0.0.1:8080'
         }
