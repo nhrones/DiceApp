@@ -20,11 +20,11 @@ webSocket.when(socketTopic.SetID, (data: { id: string }) => {
 
 // wait for it ...
 window.addEventListener('DOMContentLoaded', (e) => {
-    // navigator.serviceWorker.register('./sw.js').then( (registration) => {
-    //     console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    // },  (err) => {
-    //     console.log('ServiceWorker registration failed: ', err);
-    // });
+    navigator.serviceWorker.register('./sw.js').then( (registration) => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    },  (err) => {
+        console.log('ServiceWorker registration failed: ', err);
+    });
     
     // instantiate a view container
     Container.init(document.getElementById('canvas') as HTMLCanvasElement, 'snow')
