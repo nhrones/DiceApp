@@ -62,8 +62,8 @@ class SocketSingleton {
             ws = 'ws://127.0.0.1:8080';
         }
         this.webSocket = new WebSocket(ws)
-        if (DEBUG) console.log(`window.location.host: ${window.location.host}`)
-        if (DEBUG) console.log(`connected to: ${ws}`)
+        if (DEBUG > 1) console.log(`window.location.host: ${window.location.host}`)
+        if (DEBUG > 1) console.log(`connected to: ${ws}`)
         
         // set up a `message` event handler for this connection
         this.webSocket.onmessage = (message: MessageEvent) => {
