@@ -4,6 +4,9 @@ import { Container, container } from './view/container.js'
 import { webSocket, socketTopic } from './framework/model/socket.js';
 import { setThisPlayer, setCurrentPlayer, thisPlayer } from './model/players.js';
 
+export let DEBUG = 2
+export let SERVICE_WORKER = true
+
 // on webSocket.init, the socketServer will 
 // issue a new client 'ID'
 webSocket.when(socketTopic.SetID, (data: { id: string }) => {
@@ -20,11 +23,14 @@ webSocket.when(socketTopic.SetID, (data: { id: string }) => {
 
 // wait for it ...
 window.addEventListener('DOMContentLoaded', (e) => {
-    navigator.serviceWorker.register('./sw.js').then( (registration) => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    },  (err) => {
-        console.log('ServiceWorker registration failed: ', err);
-    });
+    
+    if (SERVICE_WORKER) {
+        navigator.serviceWorker.register('./sw.js').then((registration) => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, (err) => {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    }
     
     // instantiate a view container
     Container.init(document.getElementById('canvas') as HTMLCanvasElement, 'snow')

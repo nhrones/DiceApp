@@ -1,9 +1,6 @@
+import { DEBUG } from '../../app.js'
 import { SubscriptionObject, } from '../../types.js'
 import { events, topic } from '../model/events.js'
-
-/** (1) to see all console.log messages 
- *  (0) to prevent all messages */
-let DEBUG = (1) ? true : false
 
 /*
 key		callback location
@@ -59,18 +56,20 @@ class SocketSingleton {
         
         // instantiate a new WebSocket listener
         let ws = `wss://dice-socket-server.deno.dev/`
-        if (window.location.host === '127.0.0.1:8000' || window.location.host === 'localhost:8000') {
-            ws = 'ws://127.0.0.1:8080'
+        if ( 
+            window.location.host.startsWith( '127.0.0.1') 
+         || window.location.host.startsWith('localhost')) {
+            ws = 'ws://127.0.0.1:8080';
         }
         this.webSocket = new WebSocket(ws)
-        console.log(`window.location.host: ${window.location.host}`)
-        console.log(`connected to: ${ws}`)
+        if (DEBUG) console.log(`window.location.host: ${window.location.host}`)
+        if (DEBUG) console.log(`connected to: ${ws}`)
         
         // set up a `message` event handler for this connection
         this.webSocket.onmessage = (message: MessageEvent) => {
             console.info(message)
             const d = JSON.parse(message.data)
-            if (DEBUG) console.log(`Socket recieved: ${message.data}`)
+            if (DEBUG > 2) console.log(`Socket recieved: ${message.data}`)
             this.dispatch(d.topic, d.data)
         }
 
