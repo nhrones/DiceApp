@@ -1,7 +1,9 @@
-import { DEBUG } from '../../app.js'
+
 import { SubscriptionObject, } from '../../types.js'
 import { events, topic } from '../model/events.js'
-let debug = DEBUG || true
+
+const DEBUG = 2
+
 /** A singleton WebSocket Events class  */
 class SocketSingleton {
 
@@ -46,14 +48,14 @@ class SocketSingleton {
             ws = 'ws://127.0.0.1:8080';
         }
         this.webSocket = new WebSocket(ws)
-        if (debug > 1) console.log(`window.location.host: ${window.location.host}`)
-        if (debug > 1) console.log(`connected to: ${ws}`)
+        if (DEBUG > 1) console.log(`window.location.host: ${window.location.host}`)
+        if (DEBUG > 1) console.log(`connected to: ${ws}`)
         
         // set up a `message` event handler for this connection
         this.webSocket.onmessage = (message: MessageEvent) => {
             console.info(message)
             const d = JSON.parse(message.data)
-            if (debug > 2) console.log(`Socket recieved: ${message.data}`)
+            if (DEBUG > 2) console.log(`Socket recieved: ${message.data}`)
             this.dispatch(d.topic, d.data)
         }
 

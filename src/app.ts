@@ -1,6 +1,4 @@
 
-export const DEBUG = 2
-
 import { DiceGame } from './model/diceGame.js';
 import { Container, container } from './view/container.js'
 import { webSocket, socketTopic } from './framework/model/socket.js';
