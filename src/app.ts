@@ -4,7 +4,7 @@ import { Container, container } from './view/container.js'
 import { webSocket, socketTopic } from './framework/model/socket.js';
 import { setThisPlayer, setCurrentPlayer, thisPlayer } from './model/players.js';
 
-export let DEBUG = 2
+export const DEBUG = 2
 export let SERVICE_WORKER = true
 
 // on webSocket.init, the socketServer will 
