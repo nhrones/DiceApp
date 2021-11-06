@@ -1,21 +1,7 @@
 import { DEBUG } from '../../app.js'
 import { SubscriptionObject, } from '../../types.js'
 import { events, topic } from '../model/events.js'
-
-/*
-key		callback location
------------------------------------
-SetID		    app.js:5
-UpdatePlayers	players.js:17
-UpdateDie	    dice.js:32
-UpdateRoll	    rollButton.js:13
-ResetTurn	    diceGame.js:24
-ResetGame	    diceGame.js:30
-ShowPopup	    popup.js:30
-UpdateScore#	scoreElement.js:31
-*/
-
- 
+let debug = DEBUG || true
 /** A singleton WebSocket Events class  */
 class SocketSingleton {
 
@@ -29,8 +15,6 @@ class SocketSingleton {
     }
 
     webSocket: WebSocket | null = null
-    isOpen: boolean = false
-    openAttempts: number = 0
 
     // singleton construction and accessor
     static getInstance() {
@@ -62,20 +46,19 @@ class SocketSingleton {
             ws = 'ws://127.0.0.1:8080';
         }
         this.webSocket = new WebSocket(ws)
-        if (DEBUG > 1) console.log(`window.location.host: ${window.location.host}`)
-        if (DEBUG > 1) console.log(`connected to: ${ws}`)
+        if (debug > 1) console.log(`window.location.host: ${window.location.host}`)
+        if (debug > 1) console.log(`connected to: ${ws}`)
         
         // set up a `message` event handler for this connection
         this.webSocket.onmessage = (message: MessageEvent) => {
             console.info(message)
             const d = JSON.parse(message.data)
-            if (DEBUG > 2) console.log(`Socket recieved: ${message.data}`)
+            if (debug > 2) console.log(`Socket recieved: ${message.data}`)
             this.dispatch(d.topic, d.data)
         }
 
         // only once at startup
         this.webSocket.onopen = () => {
-            this.isOpen = true
             events.broadcast(topic.PopupResetGame, {})
         }
     }
@@ -138,23 +121,19 @@ class SocketSingleton {
     }
 }
 
-/**
- * the exported webSocket singlton object
- */
+/** exported webSocket singlton object */
 export const webSocket = SocketSingleton.getInstance()
 
-/**
- * exported socket event topics list
- */
+/** exported socket event topics list */
 export const socketTopic = {
-    RegisterPlayer: 'RegisterPlayer',
-    ResetGame: 'ResetGame',
-    ResetTurn: 'ResetTurn',
-    SetPlayerName: 'SetPlayerName',
-    ShowPopup: 'ShowPopup',
-    UpdateRoll: 'UpdateRoll',
-    UpdateScore: 'UpdateScore',
-    UpdateDie: 'UpdateDie',
-    UpdatePlayers: 'UpdatePlayers',
-    SetID: "SetID"
+    RegisterPlayer: 'RegisterPlayer', // socket.js:73
+    ResetGame: 'ResetGame', // diceGame.js:30
+    ResetTurn: 'ResetTurn', // diceGame.js:24
+    SetPlayerName: 'SetPlayerName', // ?
+    ShowPopup: 'ShowPopup', // popup.js:30
+    UpdateRoll: 'UpdateRoll', // rollButton.js:13
+    UpdateScore: 'UpdateScore', // scoreElement.js:31
+    UpdateDie: 'UpdateDie', // dice.js:32
+    UpdatePlayers: 'UpdatePlayers', // players.js:17
+    SetID: "SetID" // app.js:5
 }
